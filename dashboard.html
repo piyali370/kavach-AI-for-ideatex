@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KAVACH AI | KMC Command Centre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="animations.css"/>
+</head>
+<body class="dashboard-page">
+
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="orb orb-dash-1" aria-hidden="true"></div>
+  <div class="orb orb-dash-2" aria-hidden="true"></div>
+
+  <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="logo-shield">⬡</span>
+      <span class="logo-text-sm">KAVACH <span class="logo-ai">AI</span></span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-section="overview">
+        <span class="nav-icon">◈</span><span>Command Overview</span>
+      </a>
+      <a href="#" class="nav-item" data-section="predict">
+        <span class="nav-icon">◎</span><span>Risk Predictor</span>
+      </a>
+      <a href="#" class="nav-item" data-section="sensors">
+        <span class="nav-icon">◉</span><span>Live Sensors</span>
+      </a>
+      <a href="#" class="nav-item" data-section="biometrics">
+        <span class="nav-icon">💓</span><span>Worker Biometrics</span>
+      </a>
+      <a href="#" class="nav-item" data-section="map">
+        <span class="nav-icon">🗺</span><span>Zone Map</span>
+      </a>
+      <a href="#" class="nav-item" data-section="sos">
+        <span class="nav-icon">◆</span><span>SOS Command</span>
+      </a>
+      <a href="#" class="nav-item" data-section="history">
+        <span class="nav-icon">◇</span><span>Audit Log</span>
+      </a>
+    </nav>
+
+    <!-- DB status -->
+    <div class="sidebar-db-status">
+      <span class="db-dot" id="dbDot"></span>
+      <span class="db-label">MongoDB</span>
+      <span class="db-state" id="dbState">checking…</span>
+    </div>
+
+    <!-- Hooghly tide + weather strip -->
+    <div class="sidebar-env">
+      <div class="env-row">
+        <span class="env-icon">🌊</span>
+        <div class="env-info">
+          <span class="env-label">Hooghly Tide</span>
+          <span class="env-val" id="tideLevel">— m</span>
+        </div>
+      </div>
+      <div class="env-row">
+        <span class="env-icon">⛈</span>
+        <div class="env-info">
+          <span class="env-label">Kalbaisakhi Risk</span>
+          <span class="env-val" id="stormRisk">LOW</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-user">
+        <div class="user-avatar" id="userAvatar">A</div>
+        <div class="user-info">
+          <span class="user-name" id="userName">Loading…</span>
+          <span class="user-role" id="userRole">—</span>
+          <span class="user-zone" id="userZone"></span>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════ MAIN ═══════════════════ -->
+  <main class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      <div class="topbar-title" id="topbarTitle">Command Overview</div>
+      <div class="topbar-right">
+        <div class="live-badge topbar-live">
+          <span class="live-dot"></span>
+          <span id="liveWeather">Loading…</span>
+        </div>
+        <div class="topbar-time" id="topbarTime">--:--:--</div>
+      </div>
+    </header>
+
+    <!-- ════════ OVERVIEW ════════ -->
+    <section class="dash-section active" id="section-overview">
+      <div class="section-header animated-fade">
+        <h2 id="welcomeText">KMC Command Centre</h2>
+        <p>Live safety intelligence across Kolkata's underground infrastructure network.</p>
+      </div>
+
+      <!-- KPI Grid -->
+      <div class="kpi-grid animated-fade" style="animation-delay:.08s">
+        <div class="kpi-card kpi-safe hover-float">
+          <div class="kpi-icon">✓</div>
+          <div class="kpi-info">
+            <span class="kpi-val" id="kpiSafe">—</span>
+            <span class="kpi-label">Safe Entries Today</span>
+          </div>
+        </div>
+        <div class="kpi-card kpi-warn hover-float">
+          <div class="kpi-icon">⚠</div>
+          <div class="kpi-info">
+            <span class="kpi-val" id="kpiPending">—</span>
+            <span class="kpi-label">Pending Approvals</span>
+          </div>
+        </div>
+        <div class="kpi-card kpi-danger hover-float">
+          <div class="kpi-icon">🚫</div>
+          <div class="kpi-info">
+            <span class="kpi-val" id="kpiHigh">—</span>
+            <span class="kpi-label">High-Risk Zones</span>
+          </div>
+        </div>
+        <div class="kpi-card kpi-info hover-float">
+          <div class="kpi-icon">◉</div>
+          <div class="kpi-info">
+            <span class="kpi-val" id="kpiSensors">—</span>
+            <span class="kpi-label">Sensors Online</span>
+          </div>
+        </div>
+        <div class="kpi-card kpi-tide hover-float">
+          <div class="kpi-icon">🌊</div>
+          <div class="kpi-info">
+            <span class="kpi-val" id="kpiTide">—</span>
+            <span class="kpi-label">Hooghly Level (m)</span>
+          </div>
+        </div>
+        <div class="kpi-card kpi-worker hover-float">
+          <div class="kpi-icon">👷</div>
+          <div class="kpi-info">
+            <span class="kpi-val" id="kpiWorkers">—</span>
+            <span class="kpi-label">Active Workers</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert ticker -->
+      <div class="glass-card alert-ticker-card animated-fade" style="animation-delay:.14s">
+        <div class="ticker-header">
+          <span class="live-dot"></span>
+          <strong>KMC Live Alert Feed</strong>
+          <span class="ticker-badge">Auto-scroll</span>
+        </div>
+        <div class="ticker-wrap">
+          <div class="ticker-track" id="tickerTrack"></div>
+        </div>
+      </div>
+
+      <!-- Charts row -->
+      <div class="two-col-grid animated-fade" style="animation-delay:.2s">
+        <div class="glass-card">
+          <h3 class="card-title">48-Hour Rainfall — Kolkata (mm)</h3>
+          <canvas id="rainfallChart" height="148"></canvas>
+          <div class="chart-note">🔴 Red bars = waterlogging threshold exceeded (>60mm)</div>
+        </div>
+        <div class="glass-card">
+          <h3 class="card-title">Zone Risk Index — KMC Wards</h3>
+          <div class="zone-list" id="zoneList"></div>
+        </div>
+      </div>
+
+      <!-- Hooghly tide chart -->
+      <div class="glass-card animated-fade" style="animation-delay:.28s; margin-top:20px">
+        <h3 class="card-title">Hooghly River Tidal Cycle — Last 24h (metres above MSL)</h3>
+        <canvas id="tideChart" height="120"></canvas>
+        <div class="chart-note">⚠ Danger zone above 4.5m — sewer backflow risk increases by 340%</div>
+      </div>
+    </section>
+
+    <!-- ════════ RISK PREDICTOR ════════ -->
+    <section class="dash-section" id="section-predict">
+      <div class="section-header animated-fade">
+        <h2>AI Risk Predictor</h2>
+        <p>Multi-factor hazard scoring for KMC sewer entry authorisation. Saved to MongoDB.</p>
+      </div>
+
+      <div class="predict-grid">
+        <!-- Inputs -->
+        <div class="glass-card predict-form animated-fade" style="animation-delay:.08s">
+          <h3 class="card-title">Environmental + Structural Parameters</h3>
+
+          <div class="form-group">
+            <label for="rainfall">Rainfall (mm) <span class="param-hint">Last 24 hours</span></label>
+            <input type="number" id="rainfall" placeholder="0" min="0" max="500"/>
+            <input type="range" id="rainfallSlider" min="0" max="200" value="0" class="range-slider"/>
+            <div class="range-labels"><span>0mm</span><span>100mm</span><span>200mm+</span></div>
+          </div>
+
+          <div class="form-group">
+            <label for="tideInput">Hooghly Tide Level (m) <span class="param-hint">Current MSL height</span></label>
+            <input type="number" id="tideInput" placeholder="2.5" min="0" max="8" step="0.1"/>
+            <input type="range" id="tideSlider" min="0" max="7" value="2.5" step="0.1" class="range-slider"/>
+            <div class="range-labels"><span>0m</span><span>3.5m</span><span>7m</span></div>
+          </div>
+
+          <div class="form-group">
+            <label for="h2s">H₂S Gas (ppm) <span class="param-hint">Safe limit: 10 ppm</span></label>
+            <input type="number" id="h2s" placeholder="0" min="0" max="1000"/>
+            <input type="range" id="h2sSlider" min="0" max="100" value="0" class="range-slider"/>
+          </div>
+
+          <div class="form-group">
+            <label for="ch4">CH₄ Gas (%LEL) <span class="param-hint">Explosive limit: 100%</span></label>
+            <input type="number" id="ch4" placeholder="0" min="0" max="100"/>
+            <input type="range" id="ch4Slider" min="0" max="100" value="0" class="range-slider"/>
+          </div>
+
+          <div class="form-group">
+            <label for="co">CO Gas (ppm) <span class="param-hint">OSHA ceiling: 50 ppm</span></label>
+            <input type="number" id="co" placeholder="0" min="0" max="1000"/>
+            <input type="range" id="coSlider" min="0" max="200" value="0" class="range-slider"/>
+          </div>
+
+          <div class="form-group">
+            <label for="days">Days Since Last Cleaning</label>
+            <input type="number" id="days" placeholder="0" min="0" max="365"/>
+            <input type="range" id="daysSlider" min="0" max="90" value="0" class="range-slider"/>
+          </div>
+
+          <div class="form-group">
+            <label for="pipeAge">Pipe Structural Age (years)</label>
+            <input type="number" id="pipeAge" placeholder="0" min="0" max="150"/>
+            <input type="range" id="pipeSlider" min="0" max="100" value="0" class="range-slider"/>
+          </div>
+
+          <div class="form-group">
+            <label for="flowVelocity">Water Flow Velocity (m/s)</label>
+            <input type="number" id="flowVelocity" placeholder="0.5" min="0" max="10" step="0.1"/>
+            <input type="range" id="flowSlider" min="0" max="10" value="0.5" step="0.1" class="range-slider"/>
+          </div>
+
+          <div class="form-group">
+            <label for="incidents">Past Incidents <span class="param-hint">Last 6 months</span></label>
+            <input type="number" id="incidents" placeholder="0" min="0" max="50"/>
+            <input type="range" id="incidentsSlider" min="0" max="10" value="0" class="range-slider"/>
+          </div>
+
+          <!-- Zone selector -->
+          <div class="form-group">
+            <label for="zoneSelect">KMC Zone</label>
+            <div class="select-wrapper">
+              <select id="zoneSelect">
+                <option>Thanthania Pumping Station</option>
+                <option>Ultadanga Underpass</option>
+                <option>Ballygunge</option>
+                <option>Park Street</option>
+                <option>Salt Lake Sector V</option>
+                <option>Behala</option>
+                <option>Khidirpur Dock</option>
+                <option>Shyambazar</option>
+                <option>Kalighat</option>
+                <option>Tollygunge</option>
+                <option>Gariahat</option>
+                <option>Rajabazar</option>
+              </select>
+              <span class="select-arrow">▾</span>
+            </div>
+          </div>
+
+          <!-- Quick presets -->
+          <div class="preset-row">
+            <span class="preset-label">Presets:</span>
+            <button class="preset-btn" onclick="fillPreset('safe')">🟢 Safe</button>
+            <button class="preset-btn" onclick="fillPreset('flood')">🌊 Flood</button>
+            <button class="preset-btn" onclick="fillPreset('high')">🔴 Critical</button>
+          </div>
+
+          <button class="btn-primary" onclick="predictRisk()" id="predictBtn">
+            <span class="btn-label">Run AI Assessment</span>
+            <span class="btn-icon">→</span>
+          </button>
+        </div>
+
+        <!-- Gauge result -->
+        <div class="glass-card predict-result animated-fade" style="animation-delay:.16s">
+          <h3 class="card-title">Assessment Result</h3>
+
+          <div class="gauge-wrapper">
+            <svg class="gauge-svg" viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg">
+              <path class="gauge-track" d="M 20 115 A 90 90 0 0 1 200 115" fill="none" stroke-width="16" stroke-linecap="round"/>
+              <path class="gauge-fill" id="gaugeFill"
+                d="M 20 115 A 90 90 0 0 1 200 115"
+                fill="none" stroke-width="16" stroke-linecap="round"
+                stroke-dasharray="283" stroke-dashoffset="283"/>
+              <line class="gauge-needle" id="gaugeNeedle"
+                x1="110" y1="115" x2="110" y2="35"
+                stroke-width="3" stroke-linecap="round"
+                transform="rotate(-90,110,115)"/>
+              <circle cx="110" cy="115" r="7" class="gauge-center"/>
+              <text x="16"  y="128" class="gauge-label" fill="#22c55e">LOW</text>
+              <text x="110" y="20"  class="gauge-label" text-anchor="middle" fill="#f59e0b">MED</text>
+              <text x="204" y="128" class="gauge-label" text-anchor="end" fill="#ef4444">HIGH</text>
+            </svg>
+            <div class="gauge-score" id="gaugeScore">—</div>
+            <div class="gauge-pct"   id="gaugePct">Awaiting Input</div>
+          </div>
+
+          <div class="result-banner" id="resultBanner">
+            <span id="riskResult">Enter parameters and run assessment.</span>
+          </div>
+
+          <div class="llm-insight" id="llmInsight" style="display:none">
+            <div class="llm-header">
+              <span class="llm-icon">✦</span>
+              <span>KMC AI Safety Insight</span>
+              <span class="llm-badge">KAVACH Engine</span>
+            </div>
+            <p id="llmText"></p>
+          </div>
+
+          <div class="recommend-list" id="recommendList"></div>
+
+          <!-- Factor breakdown bars -->
+          <div class="factor-breakdown" id="factorBreakdown" style="display:none">
+            <h3 class="card-title" style="margin-top:16px">Factor Breakdown</h3>
+            <div id="factorBars"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ LIVE SENSORS ════════ -->
+    <section class="dash-section" id="section-sensors">
+      <div class="section-header animated-fade">
+        <h2>Live Sensor Network</h2>
+        <p>Real-time underground telemetry via WebSocket — auto-refreshes every 4s.</p>
+      </div>
+
+      <div class="sensor-legend animated-fade" style="animation-delay:.06s">
+        <span class="legend-item"><span class="legend-dot ok"></span>Normal</span>
+        <span class="legend-item"><span class="legend-dot warn"></span>Warning</span>
+        <span class="legend-item"><span class="legend-dot crit"></span>Critical</span>
+      </div>
+
+      <div class="sensor-grid animated-fade" id="sensorGrid" style="animation-delay:.12s">
+        <!-- Skeletons filled by JS -->
+        <div class="sensor-card"><div class="skeleton" style="height:140px;border-radius:12px"></div></div>
+        <div class="sensor-card"><div class="skeleton" style="height:140px;border-radius:12px"></div></div>
+        <div class="sensor-card"><div class="skeleton" style="height:140px;border-radius:12px"></div></div>
+        <div class="sensor-card"><div class="skeleton" style="height:140px;border-radius:12px"></div></div>
+        <div class="sensor-card"><div class="skeleton" style="height:140px;border-radius:12px"></div></div>
+        <div class="sensor-card"><div class="skeleton" style="height:140px;border-radius:12px"></div></div>
+      </div>
+    </section>
+
+    <!-- ════════ WORKER BIOMETRICS ════════ -->
+    <section class="dash-section" id="section-biometrics">
+      <div class="section-header animated-fade">
+        <h2>Worker Health Telemetry</h2>
+        <p>Live biometric feeds from workers currently inside sewer zones across Kolkata.</p>
+      </div>
+      <div class="biometric-grid animated-fade" id="biometricGrid" style="animation-delay:.1s">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ════════ ZONE MAP ════════ -->
+    <section class="dash-section" id="section-map">
+      <div class="section-header animated-fade">
+        <h2>KMC Zone Tactical Map</h2>
+        <p>Live risk heatmap across all monitored Kolkata wards and sewer infrastructure nodes.</p>
+      </div>
+
+      <div class="glass-card animated-fade" style="animation-delay:.08s; padding:0; overflow:hidden">
+        <canvas id="kmcMap" width="900" height="540" style="width:100%;display:block;border-radius:18px"></canvas>
+      </div>
+
+      <div class="map-legend animated-fade" style="animation-delay:.16s">
+        <span class="legend-item"><span class="legend-dot ok"></span>Safe Zone</span>
+        <span class="legend-item"><span class="legend-dot warn"></span>Caution Zone</span>
+        <span class="legend-item"><span class="legend-dot crit"></span>Danger Zone</span>
+        <span class="legend-item"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#60a5fa;box-shadow:0 0 8px #60a5fa;margin-right:6px"></span>Active Worker</span>
+        <span class="legend-item"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#ef4444;box-shadow:0 0 12px #ef4444;margin-right:6px;animation:blink 1s infinite"></span>SOS Active</span>
+      </div>
+    </section>
+
+    <!-- ════════ SOS COMMAND ════════ -->
+    <section class="dash-section" id="section-sos">
+      <div class="section-header animated-fade">
+        <h2>Elite SOS Command Centre</h2>
+        <p>Multi-tier emergency dispatch — KMC Ward → Central Control → Emergency Services.</p>
+      </div>
+
+      <!-- SOS RADAR VISUALIZER (shown when SOS active) -->
+      <div class="sos-radar-container" id="sosRadarContainer" style="display:none">
+        <canvas id="sosRadar" width="340" height="340"></canvas>
+        <div class="radar-info">
+          <div class="radar-title">🚨 ACTIVE EMERGENCY</div>
+          <div class="radar-worker" id="radarWorkerName">—</div>
+          <div class="radar-zone"   id="radarZoneName">—</div>
+          <div class="radar-coords" id="radarCoords">—</div>
+        </div>
+      </div>
+
+      <div class="sos-layout animated-fade" style="animation-delay:.08s">
+
+        <!-- SOS Trigger Card -->
+        <div class="glass-card sos-card">
+          <div class="sos-ring-wrap">
+            <button class="sos-button" id="sosButton">
+              <span class="sos-label">SOS</span>
+              <span class="sos-sublabel">Hold 2s to Activate</span>
+            </button>
+          </div>
+
+          <p class="sos-desc">
+            Hold the button for 2 seconds to trigger the
+            <strong>KMC Multi-Tier Emergency Protocol</strong>.
+            Your identity, GPS coordinates, and zone data are
+            broadcast to the KMC Central Control Room instantly.
+          </p>
+
+          <!-- Dispatch status timeline -->
+          <div class="dispatch-timeline" id="dispatchTimeline" style="display:none">
+            <div class="dispatch-step" id="dStep1">
+              <span class="dispatch-dot"></span>
+              <div>
+                <strong>Tier 1 — Ward Supervisor Alert</strong>
+                <span id="dStep1Status">Pending…</span>
+              </div>
+            </div>
+            <div class="dispatch-step" id="dStep2">
+              <span class="dispatch-dot"></span>
+              <div>
+                <strong>Tier 2 — KMC Central Control Room</strong>
+                <span id="dStep2Status">Pending…</span>
+              </div>
+            </div>
+            <div class="dispatch-step" id="dStep3">
+              <span class="dispatch-dot"></span>
+              <div>
+                <strong>Tier 3 — Emergency Services (108)</strong>
+                <span id="dStep3Status">Pending…</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sos-status">
+            <span class="sos-status-dot" id="sosStatusDot"></span>
+            <span id="sosStatusText">Standby — No Active Emergency</span>
+          </div>
+        </div>
+
+        <!-- Contacts + event log -->
+        <div class="glass-card sos-contacts">
+          <h3 class="card-title">KMC Emergency Contacts</h3>
+          <div class="contact-list">
+            <div class="contact-item">
+              <div class="contact-avatar">SC</div>
+              <div class="contact-info">
+                <strong>Subrata Chakraborty</strong>
+                <span>Chief Sanitation Officer · +91 98300 11234</span>
+              </div>
+              <span class="contact-online" title="Online"></span>
+            </div>
+            <div class="contact-item">
+              <div class="contact-avatar">PM</div>
+              <div class="contact-info">
+                <strong>Pallabi Mukherjee</strong>
+                <span>KMC Control Room · +91 33 2286 1212</span>
+              </div>
+              <span class="contact-online" title="Online"></span>
+            </div>
+            <div class="contact-item">
+              <div class="contact-avatar">🏥</div>
+              <div class="contact-info">
+                <strong>KMC Emergency Dispatch</strong>
+                <span>Ambulance / Fire · <strong>108</strong></span>
+              </div>
+              <span class="contact-online"></span>
+            </div>
+            <div class="contact-item">
+              <div class="contact-avatar">🚒</div>
+              <div class="contact-info">
+                <strong>Kolkata Fire Services</strong>
+                <span>Hazmat / Rescue · <strong>101</strong></span>
+              </div>
+              <span class="contact-online"></span>
+            </div>
+          </div>
+
+          <h3 class="card-title" style="margin-top:24px">Recent SOS Events</h3>
+          <div id="sosEventLog"><p class="table-empty">No events loaded.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ AUDIT LOG ════════ -->
+    <section class="dash-section" id="section-history">
+      <div class="section-header animated-fade">
+        <h2>MongoDB Audit Log</h2>
+        <p>Complete record of all KMC risk assessments stored in the database.</p>
+      </div>
+
+      <div class="glass-card animated-fade" style="animation-delay:.08s">
+        <div class="history-toolbar">
+          <h3 class="card-title" style="margin-bottom:0">Assessment Records</h3>
+          <div class="history-pagination">
+            <button class="page-btn" onclick="historyPrev()">‹ Prev</button>
+            <span id="historyPageInfo" class="page-info">Page 1</span>
+            <button class="page-btn" onclick="historyNext()">Next ›</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Date &amp; Time</th>
+                <th>KMC Zone</th>
+                <th>Risk Score</th>
+                <th>Verdict</th>
+                <th>Operator</th>
+              </tr>
+            </thead>
+            <tbody id="historyBody">
+              <tr><td colspan="5" class="table-empty">Select Audit Log to load.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /main-content -->
+
+  <script src="script.js"></script>
+
+  <script>
+    /* ── Quick DB status check ───────────────────────────────── */
+    (async function checkDB() {
+      const dot = document.getElementById('dbDot');
+      const st  = document.getElementById('dbState');
+      try {
+        const r = await fetch('http://localhost:5000/api/health');
+        const d = await r.json();
+        const ok = d.db === 'connected';
+        if (dot) dot.style.background = ok ? '#22c55e' : '#ef4444';
+        if (st)  st.textContent       = ok ? 'Connected' : 'Offline';
+      } catch {
+        if (dot) dot.style.background = '#ef4444';
+        if (st)  st.textContent       = 'Offline';
+      }
+    })();
+
+    /* ── Quick-fill presets ──────────────────────────────────── */
+    function fillPreset(type) {
+      const P = {
+        safe  : { rainfall:8,  tideInput:2.2, h2s:2,  ch4:3,  co:5,  days:7,  pipeAge:15, flowVelocity:0.4, incidents:0 },
+        flood : { rainfall:145,tideInput:5.2, h2s:18, ch4:22, co:40, days:42, pipeAge:55, flowVelocity:3.8, incidents:3 },
+        high  : { rainfall:190,tideInput:6.8, h2s:65, ch4:78, co:95, days:75, pipeAge:90, flowVelocity:6.2, incidents:6 },
+      };
+      const p = P[type]; if (!p) return;
+      Object.entries(p).forEach(([k,v]) => {
+        const inp = document.getElementById(k);
+        const sld = document.getElementById(k+'Slider') || document.getElementById(k.replace('input','')+'Slider');
+        if (inp) inp.value = v;
+        if (sld) sld.value = v;
+      });
+    }
+  </script>
+</body>
+</html>

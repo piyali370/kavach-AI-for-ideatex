@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KAVACH AI | Kolkata Municipal Corporation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="animations.css"/>
+</head>
+<body class="login-page">
+
+  <!-- Ambient background -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <div class="login-wrapper">
+
+    <!-- ── BRAND COLUMN ─────────────────────────────────────── -->
+    <div class="brand-col animated-fade">
+
+      <div class="brand-logo">
+        <span class="logo-shield">⬡</span>
+        <span class="logo-text">KAVACH</span>
+        <span class="logo-ai">AI</span>
+      </div>
+
+      <h1 class="brand-headline">
+        Protecting Those<br/>Who Protect<br/><em>Kolkata.</em>
+      </h1>
+
+      <p class="brand-sub">
+        Real-time AI hazard prediction for the Kolkata Municipal Corporation's
+        sanitation workforce. Integrating Hooghly tidal data, Kalbaisakhi storm
+        alerts and live underground telemetry across all <strong>144 wards</strong>.
+      </p>
+
+      <!-- Animated stat strip -->
+      <div class="stat-strip slide-in">
+        <div class="stat-item">
+          <div class="stat-row">
+            <span class="stat-num" data-target="96">0</span>
+            <span class="stat-unit">%</span>
+          </div>
+          <span class="stat-label">Prediction Accuracy</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-row">
+            <span class="stat-num" data-target="18">0</span>
+            <span class="stat-unit">K+</span>
+          </div>
+          <span class="stat-label">Workers Protected</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-row">
+            <span class="stat-num" data-target="144">0</span>
+            <span class="stat-unit"></span>
+          </div>
+          <span class="stat-label">KMC Wards</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-row">
+            <span class="stat-num" data-target="32">0</span>
+            <span class="stat-unit">s</span>
+          </div>
+          <span class="stat-label">Avg. Prediction</span>
+        </div>
+      </div>
+
+      <!-- Feature pills -->
+      <div class="feature-pills slide-in" style="animation-delay:.35s">
+        <span class="pill">🌊 Hooghly Tidal Monitor</span>
+        <span class="pill">⛈ Kalbaisakhi Alerts</span>
+        <span class="pill">🧠 AI Risk Engine</span>
+        <span class="pill">🚨 Elite SOS Dispatch</span>
+        <span class="pill">💓 Worker Biometrics</span>
+        <span class="pill">🗄 MongoDB Audit Log</span>
+      </div>
+
+      <!-- KMC badge -->
+      <div class="kmc-badge slide-in" style="animation-delay:.5s">
+        <span class="kmc-emblem">🏛</span>
+        <div>
+          <strong>Kolkata Municipal Corporation</strong>
+          <span>Urban Development &amp; Municipal Affairs — West Bengal</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── AUTH COLUMN ──────────────────────────────────────── -->
+    <div class="login-col animated-fade" style="animation-delay:.2s">
+
+      <!-- Tab switcher -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Sign In</button>
+        <button class="auth-tab"        data-tab="register">Register</button>
+      </div>
+
+      <!-- LOGIN PANEL -->
+      <div class="glass-card login-card auth-panel active" id="panel-login">
+        <div class="login-card-header">
+          <h2>Secure Access</h2>
+          <p>Sign in to the KMC KAVACH Command Centre</p>
+        </div>
+
+        <div class="form-group">
+          <label for="role">Access Role</label>
+          <div class="select-wrapper">
+            <select id="role">
+              <option value="admin">🏛 KMC Admin / Commissioner</option>
+              <option value="supervisor">👷 Ward Supervisor</option>
+              <option value="worker">🔧 Sanitation Worker</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="userid">KMC Employee ID</label>
+          <input type="text" id="userid" placeholder="e.g. ADMIN-KMC-001" autocomplete="username"/>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"/>
+        </div>
+
+        <button class="btn-primary" onclick="login()" id="loginBtn">
+          <span class="btn-label">Enter Command Centre</span>
+          <span class="btn-icon">→</span>
+        </button>
+
+        <p class="login-note">
+          Demo: <strong>ADMIN-KMC-001</strong> / <strong>kavach@kolkata</strong>
+        </p>
+      </div>
+
+      <!-- REGISTER PANEL -->
+      <div class="glass-card login-card auth-panel" id="panel-register">
+        <div class="login-card-header">
+          <h2>Create Account</h2>
+          <p>Register a new KMC KAVACH account</p>
+        </div>
+
+        <div class="form-group">
+          <label for="reg_eid">KMC Employee ID</label>
+          <input type="text" id="reg_eid" placeholder="e.g. KMC-WARD-0099"/>
+        </div>
+
+        <div class="form-group">
+          <label for="reg_name">Full Name</label>
+          <input type="text" id="reg_name" placeholder="e.g. Subhash Chandra Das"/>
+        </div>
+
+        <div class="form-group">
+          <label for="reg_zone">Assigned Zone / Ward</label>
+          <div class="select-wrapper">
+            <select id="reg_zone">
+              <option value="Thanthania Pumping Station">Thanthania Pumping Station</option>
+              <option value="Ultadanga Underpass">Ultadanga Underpass</option>
+              <option value="Ballygunge">Ballygunge</option>
+              <option value="Park Street">Park Street</option>
+              <option value="Salt Lake Sector V">Salt Lake Sector V</option>
+              <option value="Behala">Behala</option>
+              <option value="Khidirpur Dock">Khidirpur Dock</option>
+              <option value="Shyambazar">Shyambazar</option>
+              <option value="Kalighat">Kalighat</option>
+              <option value="Tollygunge">Tollygunge</option>
+              <option value="Gariahat">Gariahat</option>
+              <option value="Rajabazar">Rajabazar</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg_role">Role</label>
+          <div class="select-wrapper">
+            <select id="reg_role">
+              <option value="worker">🔧 Sanitation Worker</option>
+              <option value="supervisor">👷 Ward Supervisor</option>
+              <option value="admin">🏛 KMC Admin</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg_pwd">Password <span style="color:var(--text-muted);font-size:.73rem">(min 6 chars)</span></label>
+          <input type="password" id="reg_pwd" placeholder="••••••••"/>
+        </div>
+
+        <button class="btn-primary" onclick="register()" id="registerBtn">
+          <span class="btn-label">Create Account</span>
+          <span class="btn-icon">→</span>
+        </button>
+      </div>
+
+      <!-- Status badge -->
+      <div class="live-badge login-status-badge slide-in" style="animation-delay:.55s">
+        <span class="live-dot"></span>
+        <span id="systemStatusText">Checking system status…</span>
+      </div>
+
+    </div>
+  </div><!-- /login-wrapper -->
+
+  <footer class="login-footer">
+    <span>© 2026 Kolkata Municipal Corporation</span>
+    <span class="footer-sep">·</span>
+    <span>KAVACH AI v3.0 — Kolkata Edition</span>
+    <span class="footer-sep">·</span>
+    <span>Node.js + MongoDB + WebSocket</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

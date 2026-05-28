@@ -1,0 +1,184 @@
+/* ═══════════════════════════════════════════════════════════════
+   KAVACH AI · Kolkata Edition · animations.css
+   Motion Library — Radar Pulse · SOS · Biometrics · Micro-UX
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. PAGE ENTRANCE ────────────────────────────────────────── */
+body { animation:pageIn .45s ease both; }
+@keyframes pageIn { from{opacity:0} to{opacity:1} }
+
+/* ── 2. FADE UP ──────────────────────────────────────────────── */
+.animated-fade { animation:fadeUp .65s cubic-bezier(.22,.61,.36,1) both; }
+.animated-fade:nth-child(2){ animation-delay:.08s; }
+.animated-fade:nth-child(3){ animation-delay:.16s; }
+.animated-fade:nth-child(4){ animation-delay:.24s; }
+.animated-fade:nth-child(5){ animation-delay:.32s; }
+@keyframes fadeUp {
+  from{ opacity:0; transform:translateY(22px); }
+  to  { opacity:1; transform:translateY(0); }
+}
+
+/* ── 3. SLIDE IN LEFT ────────────────────────────────────────── */
+.slide-in { animation:slideLeft .65s cubic-bezier(.22,.61,.36,1) both; }
+@keyframes slideLeft {
+  from{ opacity:0; transform:translateX(-28px); }
+  to  { opacity:1; transform:translateX(0); }
+}
+
+/* ── 4. HOVER FLOAT ──────────────────────────────────────────── */
+.hover-float:hover {
+  transform:translateY(-5px) scale(1.015);
+  box-shadow:0 16px 40px rgba(0,0,0,.38);
+}
+
+/* ── 5. BUTTON PRESS ─────────────────────────────────────────── */
+button:active:not(.sos-button):not(.nav-item):not(.auth-tab) {
+  transform:scale(0.97) !important;
+  transition:transform .08s !important;
+}
+
+/* ── 6. SKELETON SHIMMER ─────────────────────────────────────── */
+.skeleton {
+  background:linear-gradient(90deg,
+    rgba(255,255,255,.04) 25%,
+    rgba(255,255,255,.09) 50%,
+    rgba(255,255,255,.04) 75%);
+  background-size:400% 100%;
+  animation:shimmer 1.6s ease-in-out infinite;
+}
+@keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+
+/* ── 7. NEON PULSE — RED ─────────────────────────────────────── */
+.neon-pulse-red { animation:neonRed 2s ease-in-out infinite; }
+@keyframes neonRed {
+  0%,100%{box-shadow:0 0 6px rgba(239,68,68,.3)}
+  50%    {box-shadow:0 0 22px rgba(239,68,68,.7),0 0 44px rgba(239,68,68,.3)}
+}
+
+/* ── 8. NEON PULSE — CYAN ────────────────────────────────────── */
+.neon-pulse-cyan { animation:neonCyan 2.5s ease-in-out infinite; }
+@keyframes neonCyan {
+  0%,100%{box-shadow:0 0 6px rgba(34,211,238,.2)}
+  50%    {box-shadow:0 0 20px rgba(34,211,238,.6),0 0 40px rgba(34,211,238,.2)}
+}
+
+/* ── 9. NEON PULSE — BLUE (Tide alerts) ──────────────────────── */
+.neon-pulse-blue { animation:neonBlue 2s ease-in-out infinite; }
+@keyframes neonBlue {
+  0%,100%{box-shadow:0 0 6px rgba(96,165,250,.3)}
+  50%    {box-shadow:0 0 22px rgba(96,165,250,.7),0 0 44px rgba(96,165,250,.3)}
+}
+
+/* ── 10. SOS RADAR SWEEP ─────────────────────────────────────── */
+/* The radar canvas sweep animation is driven by JS requestAnimationFrame.
+   These CSS classes control the container visibility and pulse ring. */
+.radar-sweep-ring {
+  animation:radarRing 1.8s ease-out infinite;
+}
+@keyframes radarRing {
+  0%  { transform:scale(.8); opacity:.9; }
+  100%{ transform:scale(2);  opacity:0;  }
+}
+
+/* ── 11. SOS CONTAINER PULSE ─────────────────────────────────── */
+@keyframes sosContainerPulse {
+  from{ box-shadow:0 0 20px rgba(239,68,68,.2); }
+  to  { box-shadow:0 0 44px rgba(239,68,68,.5); }
+}
+
+/* ── 12. SENSOR CARD STAGGERED ENTRANCE ──────────────────────── */
+.sensor-grid .sensor-card { animation:fadeUp .5s ease both; }
+.sensor-grid .sensor-card:nth-child(1) { animation-delay:.00s; }
+.sensor-grid .sensor-card:nth-child(2) { animation-delay:.04s; }
+.sensor-grid .sensor-card:nth-child(3) { animation-delay:.08s; }
+.sensor-grid .sensor-card:nth-child(4) { animation-delay:.12s; }
+.sensor-grid .sensor-card:nth-child(5) { animation-delay:.16s; }
+.sensor-grid .sensor-card:nth-child(6) { animation-delay:.20s; }
+.sensor-grid .sensor-card:nth-child(7) { animation-delay:.24s; }
+.sensor-grid .sensor-card:nth-child(8) { animation-delay:.28s; }
+.sensor-grid .sensor-card:nth-child(9) { animation-delay:.32s; }
+.sensor-grid .sensor-card:nth-child(10){ animation-delay:.36s; }
+.sensor-grid .sensor-card:nth-child(11){ animation-delay:.40s; }
+.sensor-grid .sensor-card:nth-child(12){ animation-delay:.44s; }
+
+/* ── 13. BIOMETRIC CARD ENTRANCE ─────────────────────────────── */
+.biometric-grid .biometric-card { animation:fadeUp .55s ease both; }
+.biometric-grid .biometric-card:nth-child(1){ animation-delay:.00s; }
+.biometric-grid .biometric-card:nth-child(2){ animation-delay:.07s; }
+.biometric-grid .biometric-card:nth-child(3){ animation-delay:.14s; }
+.biometric-grid .biometric-card:nth-child(4){ animation-delay:.21s; }
+.biometric-grid .biometric-card:nth-child(5){ animation-delay:.28s; }
+.biometric-grid .biometric-card:nth-child(6){ animation-delay:.35s; }
+
+/* ── 14. BIOMETRIC HEART-RATE PULSE ──────────────────────────── */
+.hr-pulse { animation:heartBeat .8s ease-in-out infinite; }
+@keyframes heartBeat {
+  0%  { transform:scale(1);    }
+  14% { transform:scale(1.15); }
+  28% { transform:scale(1);    }
+  42% { transform:scale(1.10); }
+  70% { transform:scale(1);    }
+}
+
+/* ── 15. CRITICAL SENSOR PULSE ───────────────────────────────── */
+@keyframes critPulse {
+  0%,100%{ box-shadow:none; }
+  50%    { box-shadow:0 0 18px rgba(239,68,68,.5); }
+}
+
+/* ── 16. DISPATCH STEP COMPLETION ────────────────────────────── */
+@keyframes stepComplete {
+  0%  { transform:scale(0.8); opacity:0; }
+  60% { transform:scale(1.2); }
+  100%{ transform:scale(1);   opacity:1; }
+}
+.dispatch-step.done .dispatch-dot { animation:stepComplete .4s ease forwards; }
+
+/* ── 17. TOAST NOTIFICATION ──────────────────────────────────── */
+@keyframes toastIn {
+  from{ opacity:0; transform:translateX(24px); }
+  to  { opacity:1; transform:translateX(0); }
+}
+#toastContainer > div { animation:toastIn .35s ease both; }
+
+/* ── 18. TYPEWRITER CURSOR ───────────────────────────────────── */
+#llmText::after {
+  content:'|'; color:var(--cyan); animation:cursor .8s step-end infinite;
+}
+@keyframes cursor { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ── 19. TICKER PAUSE ON HOVER ───────────────────────────────── */
+.ticker-wrap:hover .ticker-track { animation-play-state:paused; }
+
+/* ── 20. NAV UNDERLINE SLIDE ─────────────────────────────────── */
+.nav-item.active::after { width:calc(100% - 24px); }
+
+/* ── 21. MAP DOT PULSE (active workers on canvas map) ───────── */
+@keyframes mapDotPulse {
+  0%  { r:6; opacity:.9; }
+  50% { r:10; opacity:.5; }
+  100%{ r:6; opacity:.9; }
+}
+
+/* ── 22. TIDE WAVE (sidebar tide indicator) ──────────────────── */
+@keyframes tideWave {
+  0%,100%{ transform:translateY(0); }
+  50%    { transform:translateY(-3px); }
+}
+.tide-wave { animation:tideWave 2s ease-in-out infinite; }
+
+/* ── 23. KALBAISAKHI STORM FLASH ──────────────────────────────── */
+@keyframes stormFlash {
+  0%,90%,100%{ opacity:1; }
+  95%        { opacity:.3; }
+}
+.storm-active { animation:stormFlash 1.2s ease-in-out infinite; color:#fbbf24 !important; }
+
+/* ── 24. REDUCED MOTION SUPPORT ──────────────────────────────── */
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+}
