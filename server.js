@@ -309,52 +309,113 @@ app.post('/api/auth/register', async (req, res) => {
   }
 });
 
-/* Login — Bypassed for development */
+// /* Login — Bypassed for development */
+// app.post('/api/auth/login', async (req, res) => {
+//   try {
+//     const { admin001,  } = req.body;
+    
+//     // 1. We skip the database check entirely
+//     console.log(`[BYPASS LOGIN] Access granted for: ${employee_id}`);
+
+//     // 2. Mock a user object (this is what the frontend expects)
+//     const user = {
+//       _id: 'dev-mode-id',
+//       employee_id: employee_id || 'GUEST',
+//       role: 'admin' // Forces admin access for everything
+//     };
+
+//     // 3. Sign a fake token
+//     const token = jwt.sign(
+//       { id: user._id, employee_id: user.employee_id, role: user.role }, 
+//       JWT_SECRET, 
+//       { expiresIn: JWT_EXPIRY }
+//     );
+
+//     return res.json({
+//       token,
+//       user: { 
+//         employee_id: user.employee_id, 
+//         name: 'Development User', 
+//         role: user.role, 
+//         label: 'KMC Admin / Commissioner', 
+//         zone: 'Kolkata' 
+//       },
+//     });
+//   } catch (err) {
+//     console.error('[LOGIN]', err.message);
+//     return res.status(500).json({ error: 'Login failed.' });
+//   }
+// });
+
+// /* Get current user */
+// app.get('/api/auth/me', authRequired, async (req, res) => {
+//   try {
+//     const user = await User.findById(req.user.id).select('-password');
+//     if (!user) return res.status(404).json({ error: 'User not found.' });
+//     return res.json({ user });
+//   } catch (err) {
+//     return res.status(500).json({ error: 'Could not fetch user.' });
+//   }
+// });
+
+/* Login — Simple Fixed Admin Login */
 app.post('/api/auth/login', async (req, res) => {
   try {
-    const { employee_id, password } = req.body;
-    
-    // 1. We skip the database check entirely
-    console.log(`[BYPASS LOGIN] Access granted for: ${employee_id}`);
+    // Get username and password from frontend
+    const { username, password } = req.body;
 
-    // 2. Mock a user object (this is what the frontend expects)
+    // Fixed credentials
+    const ADMIN_USERNAME = 'admin0001';
+    const ADMIN_PASSWORD = '1234';
+
+    // Check credentials
+    if (
+      username !== ADMIN_USERNAME ||
+      password !== ADMIN_PASSWORD
+    ) {
+      return res.status(401).json({
+        error: 'Invalid username or password'
+      });
+    }
+
+    console.log(`[LOGIN SUCCESS] ${username}`);
+
+    // Mock user object
     const user = {
       _id: 'dev-mode-id',
-      employee_id: employee_id || 'GUEST',
-      role: 'admin' // Forces admin access for everything
+      employee_id: ADMIN_USERNAME,
+      role: 'admin'
     };
 
-    // 3. Sign a fake token
+    // Create token
     const token = jwt.sign(
-      { id: user._id, employee_id: user.employee_id, role: user.role }, 
-      JWT_SECRET, 
+      {
+        id: user._id,
+        employee_id: user.employee_id,
+        role: user.role
+      },
+      JWT_SECRET,
       { expiresIn: JWT_EXPIRY }
     );
 
+    // Send response
     return res.json({
       token,
-      user: { 
-        employee_id: user.employee_id, 
-        name: 'Development User', 
-        role: user.role, 
-        label: 'KMC Admin / Commissioner', 
-        zone: 'Kolkata' 
-      },
+      user: {
+        employee_id: user.employee_id,
+        name: 'Admin User',
+        role: user.role,
+        label: 'KMC Admin / Commissioner',
+        zone: 'Kolkata'
+      }
     });
+
   } catch (err) {
     console.error('[LOGIN]', err.message);
-    return res.status(500).json({ error: 'Login failed.' });
-  }
-});
 
-/* Get current user */
-app.get('/api/auth/me', authRequired, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select('-password');
-    if (!user) return res.status(404).json({ error: 'User not found.' });
-    return res.json({ user });
-  } catch (err) {
-    return res.status(500).json({ error: 'Could not fetch user.' });
+    return res.status(500).json({
+      error: 'Login failed.'
+    });
   }
 });
 
