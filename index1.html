@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Helpline</title>
+</head>
+
+<body>
+
+    <img src="https://static.vecteezy.com/system/resources/previews/020/618/054/large_2x/sos-distress-signal-icon-for-graphic-design-logo-website-social-media-mobile-app-ui-illustration-vector.jpg"
+        alt="Call Helpline" width="250" style="cursor:pointer;" onclick="showNumbers()">
+
+    <script>
+        function showNumbers() {
+            let choice = prompt(
+                "Choose Helpline:\n" +
+                "1. Customer Support\n" +
+                "2. Emergency\n" +
+                "3. Technical Help\n\n" +
+                "Enter 1, 2, or 3"
+            );
+
+            if (choice == "1") {
+                window.location.href = "tel:+916909569063";
+            }
+            else if (choice == "2") {
+                window.location.href = "tel:+916033197145";
+            }
+            else if (choice == "3") {
+                window.location.href = "tel:+919142452157";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
