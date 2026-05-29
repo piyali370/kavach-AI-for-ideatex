@@ -1207,3 +1207,87 @@ async function predictRisk() {
 
 /* Boot */
 document.addEventListener('DOMContentLoaded', ()=>KavachApp.init());
+
+
+
+
+//mongoDB
+
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+// MongoDB Connection
+mongoose.connect("YOUR_MONGODB_URL")
+.then(() => console.log("mongodb+srv://shrelekhad_db_user:JEpnCvAoEsJCVmWB@cluster0.qpccmnx.mongodb.net/?appName=Cluster0"))
+.catch((err) => console.log(err));
+
+// Schema
+const userSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    age: Number
+});
+
+// Model
+const User = mongoose.model("User", userSchema);
+
+
+// CREATE
+app.post("/addUser", async (req, res) => {
+    try {
+        const user = new User(req.body);
+        await user.save();
+        res.json(user);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+
+// READ
+app.get("/users", async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+
+// UPDATE
+app.put("/updateUser/:id", async (req, res) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+
+        res.json(updatedUser);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+
+// DELETE
+app.delete("/deleteUser/:id", async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.json("User Deleted");
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+
+app.listen(5000, () => {
+    console.log("Server running on port 5000");
+});
