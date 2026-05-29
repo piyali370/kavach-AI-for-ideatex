@@ -3,7 +3,7 @@
  * Node.js + Express + MongoDB + WebSocket
  * Run: npm run dev
  */
-
+require('dns').setServers(['8.8.8.8', '8.8.4.4']); // Force Google DNS
 'use strict';
 require('dotenv').config();
 
@@ -309,31 +309,41 @@ app.post('/api/auth/register', async (req, res) => {
   }
 });
 
-/* Login */
+/* Login — Bypassed for development */
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { employee_id, password } = req.body;
-    if (!employee_id?.trim() || !password) {
-      return res.status(400).json({ error: 'employee_id and password are required.' });
-    }
-    const user = await User.findOne({ employee_id: employee_id.trim(), active: true });
-    if (!user) return res.status(401).json({ error: 'Invalid credentials.' });
+    
+    // 1. We skip the database check entirely
+    console.log(`[BYPASS LOGIN] Access granted for: ${employee_id}`);
 
-    const ok = await user.comparePassword(password);
-    if (!ok)  return res.status(401).json({ error: 'Invalid credentials.' });
+    // 2. Mock a user object (this is what the frontend expects)
+    const user = {
+      _id: 'dev-mode-id',
+      employee_id: employee_id || 'GUEST',
+      role: 'admin' // Forces admin access for everything
+    };
 
-    user.last_login = new Date();
-    await user.save();
+    // 3. Sign a fake token
+    const token = jwt.sign(
+      { id: user._id, employee_id: user.employee_id, role: user.role }, 
+      JWT_SECRET, 
+      { expiresIn: JWT_EXPIRY }
+    );
 
-    const token = jwt.sign({ id: user._id, employee_id: user.employee_id, role: user.role }, JWT_SECRET, { expiresIn: JWT_EXPIRY });
-    const labels = { admin: 'KMC Admin / Commissioner', supervisor: 'Ward Supervisor', worker: 'Sanitation Worker' };
     return res.json({
       token,
-      user: { employee_id: user.employee_id, name: user.name, role: user.role, label: labels[user.role], zone: user.zone },
+      user: { 
+        employee_id: user.employee_id, 
+        name: 'Development User', 
+        role: user.role, 
+        label: 'KMC Admin / Commissioner', 
+        zone: 'Kolkata' 
+      },
     });
   } catch (err) {
     console.error('[LOGIN]', err.message);
-    return res.status(500).json({ error: 'Login failed. Please retry.' });
+    return res.status(500).json({ error: 'Login failed.' });
   }
 });
 
