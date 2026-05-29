@@ -1136,15 +1136,17 @@ const KavachApp = (() => {
 
   function init() {
     // --- AUTO-LOGIN BYPASS ---
-    if (document.getElementById('role')) {
+    /*if (document.getElementById('role')) {
       sessionStorage.setItem('kavach_token', 'demo-token');
       sessionStorage.setItem('kavach_uid', 'ADMIN-KMC-001');
       sessionStorage.setItem('kavach_name', 'KMC Administrator');
       sessionStorage.setItem('kavach_role', 'admin');
       window.location.href = 'dashboard.html';
       return;
-    }
-
+    }*/
+      if (localStorage.getItem('token')) {
+    window.location.href = 'dashboard.html'; 
+}
     // --- NORMAL BOOT LOGIC ---
     if (document.getElementById('role'))              _bootLogin();
     if (document.getElementById('section-overview'))  _bootDashboard();
