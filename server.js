@@ -650,3 +650,23 @@ mongoose
   });
 
 module.exports = app;
+
+
+//MONGODB
+const express = require("express");
+const connectDB = require("./db/connectDb");
+
+const app = express();
+
+// Connect Database
+connectDB();
+
+app.get("/", (req, res) => {
+  res.send("Server Running");
+});
+
+const PORT = 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
